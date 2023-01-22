@@ -36,6 +36,18 @@ class HackerNewsPostDataSource
         return $post;
     }
 
+    public function getPostIfExists(string $title, string $site = null, string $author = null): ?Post
+    {
+        if ($author) {
+            $post = self::getByTitleAndAuthor($title, $author);
+        } elseif ($site) {
+            $post = self::getByTitleAndSite($title, $site);
+        } else {
+            $post = self::getByTitle($title);
+        }
+        return $post;
+    }
+
     public function insertOrUpdate(
         string $title,
         int $created,
@@ -44,13 +56,7 @@ class HackerNewsPostDataSource
         string $author = null,
         int $comments = null,
     ): ?Post {
-        if ($author) {
-            $post = self::getByTitleAndAuthor($title, $author);
-        } elseif ($site) {
-            $post = self::getByTitleAndSite($title, $site);
-        } else {
-            $post = self::getByTitle($title);
-        }
+        $post = self::getPostIfExists($title, $site, $author);
 
         if (!$post) {
             $post = new Post();
