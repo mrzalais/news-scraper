@@ -93,7 +93,7 @@ services:
         networks:
             - stack
     npm:
-        image: node:13.7
+        image: node:19.4.0
         container_name: npm
         working_dir: /var/www/html
         entrypoint: ['npm']
