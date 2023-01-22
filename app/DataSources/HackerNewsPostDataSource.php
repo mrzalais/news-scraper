@@ -1,0 +1,68 @@
+<?php
+
+namespace App\DataSources;
+
+use App\Models\Post;
+use App\Traits\HasInstance;
+
+class HackerNewsPostDataSource
+{
+    use HasInstance;
+
+    public function getByTitleAndAuthor(string $title, string $author): ?Post
+    {
+        /** @var Post $post */
+        $post = Post::query()->where([
+            'title' => $title,
+            'author' => $author,
+        ])->first();
+        return $post;
+    }
+
+    public function getByTitleAndSite(string $title, string $site): ?Post
+    {
+        /** @var Post $post */
+        $post = Post::query()->where([
+            'title' => $title,
+            'site' => $site,
+        ])->first();
+        return $post;
+    }
+
+    public function getByTitle(string $title): ?Post
+    {
+        /** @var Post $post */
+        $post = Post::query()->where('title', $title)->first();
+        return $post;
+    }
+
+    public function insertOrUpdate(
+        string $title,
+        int $created,
+        string $site = null,
+        string $score = null,
+        string $author = null,
+        int $comments = null,
+    ): ?Post {
+        if ($author) {
+            $post = self::getByTitleAndAuthor($title, $author);
+        } elseif ($site) {
+            $post = self::getByTitleAndSite($title, $site);
+        } else {
+            $post = self::getByTitle($title);
+        }
+
+        if (!$post) {
+            $post = new Post();
+            $post->title = $title;
+            $post->site = $site;
+            $post->author = $author;
+            $post->created = $created;
+        }
+        $post->score = $score;
+        $post->comments = $comments;
+        $post->save();
+
+        return $post;
+    }
+}
