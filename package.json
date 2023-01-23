@@ -2,7 +2,8 @@
     "private": true,
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "watch": "vite build --watch"
     },
     "devDependencies": {
         "@popperjs/core": "^2.11.6",
@@ -15,5 +16,10 @@
         "sass": "^1.56.1",
         "vite": "^4.0.0",
         "vue": "^3.2.37"
+    },
+    "dependencies": {
+        "laravel-vue-pagination": "^4.0.0",
+        "vuejs-datatable": "^2.0.0-alpha.7",
+        "watch": "^1.0.2"
     }
 }

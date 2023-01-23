@@ -4,9 +4,21 @@ namespace App\Http\Controllers;
 
 use App\DataSources\HackerNewsPostDataSource;
 use App\Models\Post;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function index(Request $request)
+    {
+        return view('home');
+    }
+
+    public function getPosts(Request $request)
+    {
+        $posts = Post::query()->orderBy('created')->get();
+        return response()->json($posts);
+    }
+
     public function insertOrUpdatePost(
         string $title,
         int $created,
