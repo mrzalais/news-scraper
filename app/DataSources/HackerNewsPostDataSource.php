@@ -12,7 +12,7 @@ class HackerNewsPostDataSource
     public function getByTitleAndAuthor(string $title, string $author): ?Post
     {
         /** @var Post $post */
-        $post = Post::query()->where([
+        $post = Post::withTrashed()->where([
             'title' => $title,
             'author' => $author,
         ])->first();
@@ -22,7 +22,7 @@ class HackerNewsPostDataSource
     public function getByTitleAndSite(string $title, string $site): ?Post
     {
         /** @var Post $post */
-        $post = Post::query()->where([
+        $post = Post::withTrashed()->where([
             'title' => $title,
             'site' => $site,
         ])->first();
@@ -32,7 +32,7 @@ class HackerNewsPostDataSource
     public function getByTitle(string $title): ?Post
     {
         /** @var Post $post */
-        $post = Post::query()->where('title', $title)->first();
+        $post = Post::withTrashed()->where('title', $title)->first();
         return $post;
     }
 
@@ -57,6 +57,9 @@ class HackerNewsPostDataSource
         int $comments = null,
     ): ?Post {
         $post = self::getPostIfExists($title, $site, $author);
+        if ($post?->trashed()) {
+            return $post;
+        }
 
         if (!$post) {
             $post = new Post();
@@ -65,10 +68,16 @@ class HackerNewsPostDataSource
             $post->author = $author;
             $post->created = $created;
         }
+
         $post->score = $score;
         $post->comments = $comments;
         $post->save();
 
         return $post;
+    }
+
+    public function deleteById(Post $post): bool
+    {
+        return $post->delete();
     }
 }

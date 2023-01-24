@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('created');
             $table->integer('comments')->nullable()->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

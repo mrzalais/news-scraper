@@ -4,16 +4,18 @@ namespace App\Http\Controllers;
 
 use App\DataSources\HackerNewsPostDataSource;
 use App\Models\Post;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function index(Request $request)
+    public function index(): View
     {
         return view('home');
     }
 
-    public function getPosts(Request $request)
+    public function getPosts(): JsonResponse
     {
         $posts = Post::query()->orderBy('created')->get();
         return response()->json($posts);
@@ -37,9 +39,9 @@ class PostController extends Controller
         );
     }
 
-    public function deletePost(Post $post)
+    public function delete(Post $post): Response
     {
-        //TODO: implement this
-//        return HackerNewsPostDataSource::instance()->deleteById();
+        HackerNewsPostDataSource::instance()->deleteById($post);
+        return response()->noContent();
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
@@ -14,10 +15,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string $author
  * @property int $created
  * @property int $comments
+ * @property int $deleted_at
  */
 class Post extends Authenticatable
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
