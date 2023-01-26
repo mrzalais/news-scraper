@@ -4,6 +4,7 @@ namespace App\DataSources;
 
 use App\Models\Post;
 use App\Traits\HasInstance;
+use Illuminate\Support\Collection;
 
 class HackerNewsPostDataSource
 {
@@ -39,11 +40,11 @@ class HackerNewsPostDataSource
     public function getPostIfExists(string $title, string $site = null, string $author = null): ?Post
     {
         if ($author) {
-            $post = self::getByTitleAndAuthor($title, $author);
+            $post = $this->getByTitleAndAuthor($title, $author);
         } elseif ($site) {
-            $post = self::getByTitleAndSite($title, $site);
+            $post = $this->getByTitleAndSite($title, $site);
         } else {
-            $post = self::getByTitle($title);
+            $post = $this->getByTitle($title);
         }
         return $post;
     }
@@ -56,7 +57,7 @@ class HackerNewsPostDataSource
         string $author = null,
         int $comments = null,
     ): ?Post {
-        $post = self::getPostIfExists($title, $site, $author);
+        $post = $this->getPostIfExists($title, $site, $author);
         if ($post?->trashed()) {
             return $post;
         }
@@ -79,5 +80,10 @@ class HackerNewsPostDataSource
     public function deleteById(Post $post): bool
     {
         return $post->delete();
+    }
+
+    public function getAllPosts(): Collection
+    {
+        return Post::query()->orderBy('created')->get();
     }
 }

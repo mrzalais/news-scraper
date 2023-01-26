@@ -17,7 +17,7 @@ class PostController extends Controller
 
     public function getPosts(): JsonResponse
     {
-        $posts = Post::query()->orderBy('created')->get();
+        $posts = HackerNewsPostDataSource::instance()->getAllPosts();
         return response()->json($posts);
     }
 

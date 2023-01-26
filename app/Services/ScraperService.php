@@ -18,7 +18,8 @@ class ScraperService
 
     private function setUpCrawler(): Crawler
     {
-        $httpClient = new Client();
+        /** @var Client $httpClient */
+        $httpClient = app(Client::class);
         return $httpClient->request('GET', $this->siteUri);
     }
 
