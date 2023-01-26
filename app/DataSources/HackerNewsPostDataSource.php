@@ -82,7 +82,7 @@ class HackerNewsPostDataSource
         return $post->delete();
     }
 
-    public function getAllPosts(): LengthAwarePaginator
+    public function getPaginatedPosts(): LengthAwarePaginator
     {
         return Post::query()->orderBy('created')->paginate(10);
     }

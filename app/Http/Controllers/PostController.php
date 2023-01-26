@@ -18,7 +18,7 @@ class PostController extends Controller
 
     public function getPosts(): AnonymousResourceCollection
     {
-        $posts = HackerNewsPostDataSource::instance()->getAllPosts();
+        $posts = HackerNewsPostDataSource::instance()->getPaginatedPosts();
         return PostResource::collection($posts);
     }
 
