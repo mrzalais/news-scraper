@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="d-flex justify-content-between align-content-center mb-2">
-            <div class="d-flex">
+            <div>
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover">
                         <tbody>
@@ -13,7 +13,7 @@
                             <th>Created</th>
                             <th>Comments</th>
                         </tr>
-                        <tr v-for="post in rows" :key="post.id">
+                        <tr v-for="post in rows.data" :key="post.id">
                             <td>{{ post.title }}</td>
                             <td>{{ post.site }}</td>
                             <td>{{ post.score }}</td>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-sm-6 offset-5">
-                        <pagination :data="posts"></pagination>
+                        <pagination :data="rows" @pagination-change-page="getPosts"></pagination>
                     </div>
                 </div>
             </div>
@@ -43,6 +43,8 @@
     </div>
 </template>
 <script>
+import { Bootstrap5Pagination } from 'laravel-vue-pagination';
+
 export default {
     data() {
         return {
@@ -79,20 +81,20 @@ export default {
         }
     },
     methods: {
-        showPosts: function () {
-            axios.get('/posts').then(function (response) {
+        getPosts: function (page = 1) {
+            axios.get('/posts?page=' + page).then(function (response) {
                 this.rows = response.data;
             }.bind(this));
         },
         deletePost: function (postId) {
             console.log(postId)
             axios.delete('/api/posts/delete/' + postId).then(response => {
-                this.showPosts();
+                this.getPosts();
             });
         }
     },
     created: function () {
-        this.showPosts()
+        this.getPosts()
     }
 }
 </script>

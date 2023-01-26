@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DataSources\HackerNewsPostDataSource;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
 
@@ -15,10 +16,10 @@ class PostController extends Controller
         return view('home');
     }
 
-    public function getPosts(): JsonResponse
+    public function getPosts(): AnonymousResourceCollection
     {
         $posts = HackerNewsPostDataSource::instance()->getAllPosts();
-        return response()->json($posts);
+        return PostResource::collection($posts);
     }
 
     public function insertOrUpdatePost(

@@ -4,7 +4,7 @@ namespace App\DataSources;
 
 use App\Models\Post;
 use App\Traits\HasInstance;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class HackerNewsPostDataSource
 {
@@ -82,8 +82,8 @@ class HackerNewsPostDataSource
         return $post->delete();
     }
 
-    public function getAllPosts(): Collection
+    public function getAllPosts(): LengthAwarePaginator
     {
-        return Post::query()->orderBy('created')->get();
+        return Post::query()->orderBy('created')->paginate(10);
     }
 }

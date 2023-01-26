@@ -13,10 +13,3 @@
         </div>
     @endsection
 @endauth
-<script>
-    import DatatableComponent from "../js/components/DatatableComponent";
-
-    export default {
-        components: {DatatableComponent}
-    }
-</script>
